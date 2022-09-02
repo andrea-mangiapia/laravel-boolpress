@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     public function index() {
-        dd('Ciao sono la dashboard privata');
+        return view('admin.home');
     }
 }
