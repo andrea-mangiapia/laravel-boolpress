@@ -43,10 +43,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        // Validiamo i campi del form
         $request->validate($this->getValidationRules());
         
+        // Se non ci sono errori di validazione, mi salvo in $form_data i dati del form
         $form_data = $request->all();
         
+        // Creo un nuovo post
         $new_post = new Post();
         $new_post->fill($form_data);
 
@@ -82,7 +85,13 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::findOrFail($id);
+        
+        $data = [
+            'post' => $post
+        ];
+
+        return view('admin.posts.edit', $data);
     }
 
     /**
@@ -94,7 +103,26 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Valido prima i dati
+        $request->validate($this->getValidationRules());
+
+        // Se validazione ok, leggo i dati del form
+        $form_data = $request->all();
+
+        // Prendere il post da modificare e aggiornarlo con ->update()
+        $post_to_update = Post::findOrFail($id);
+
+        // Aggiungere all'array associativo dei nuovi dati lo slug
+        // Ricalcoliamo lo slug solo se il nuovo titolo è diverso dal vecchio
+        if($form_data['title'] !== $post_to_update->title) {
+            $form_data['slug'] = $this->getFreeSlugFromTitle($form_data['title']);
+        } else {
+            $form_data['slug'] = $post_to_update->slug;
+        }
+
+        $post_to_update->update($form_data);
+
+        return redirect()->route('admin.posts.show', ['post' => $post_to_update->id]);
     }
 
     /**

@@ -1,6 +1,8 @@
 @extends('layouts.dashboard')
 
 @section('content')
+    <a class="btn btn-primary" href="{{ route('admin.posts.edit', ['post' => $post->id]) }}">Modifica post</a>
+
     <h1>{{ $post->title}}</h1>
 
     <div class="row-col-3 d-flex my-2">
