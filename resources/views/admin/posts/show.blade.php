@@ -16,7 +16,7 @@
         
        <div class="col">
             @if ($created_days_ago > 0)
-                <div>Creato il:</strong> {{ $post->created_at->format('d-m-Y') }} | {{ $created_days_ago }} giorn{{ $created_days_ago > 1 ? 'i' : 'o' }} fa</div>
+                <div>Creato il:</strong> {{ $post->created_at->format('d-m-Y') }} | {{ $created_days_ago }} giorn{{ $created_days_ago > 1 ? 'i' : 'o' }} fa</div>               
             @else
                 <div>Creato oggi</div>
             @endif
@@ -24,6 +24,29 @@
             <div><strong>Aggiornato il:</strong> {{ $post->updated_at->format('d-m-Y') }}</div>
             <div><strong>Slug</strong> {{ $post->slug }}</div>
             <div><strong>Categoria: </strong> {{ $post->category ? $post->category->name : 'nessuna' }}</div>
+            <div>
+                <strong>Tag:</strong>
+
+                {{-- Stampa i Tag (Primo modo) --}}
+                {{-- @if ($post->tags->isNotEmpty()) 
+                    @foreach ($post->tags as $tag)
+                        {{ $tag->name }}{{ !$loop->last ? ',' : '' }}               
+                    @endforeach            
+                @else
+                    nessuno
+                @endif --}}
+
+                {{-- Stampa i Tag (Secondo Modo) --}}
+                @forelse ($post->tags as $tag)
+                    {{ $tag->name }}{{ !$loop->last ? ',' : '' }}     
+                @empty
+                    nessuno                    
+                @endforelse
+
+
+
+            </div>
+
        </div>
     </div>
 
