@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Post;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use App\Category;
 
 class PostController extends Controller
 {
@@ -37,7 +38,13 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $categories = Category::all();
+
+        $data = [
+            'categories' => $categories
+        ];
+
+        return view('admin.posts.create', $data);
     }
 
     /**
@@ -151,7 +158,7 @@ class PostController extends Controller
 
     protected function getFreeSlugFromTitle($title) {
         // Assegnare lo slug
-        $slug_to_save = Str::slug($new_post->title, '-');
+        $slug_to_save = Str::slug($title, '-');
         $slug_base = $slug_to_save;
         // Verifico se questo slug esiste nel database
         $existing_slug_post = Post::where('slug', '=', $slug_to_save)->first();
@@ -174,7 +181,8 @@ class PostController extends Controller
     protected function getValidationRules() {
         return [
             'title' => 'required|max:255',
-            'content' => 'required|max:60000'
+            'content' => 'required|max:60000',
+            'category_id' => 'nullable|exists:categories,id'
         ];
     }
 }

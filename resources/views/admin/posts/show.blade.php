@@ -12,16 +12,19 @@
 
     <h1>{{ $post->title}}</h1>
 
-    <div class="row-col-3 my-2">
+    <div class="row my-2">
         
-        @if ($created_days_ago > 0)
-            <div class="col">Creato il:</strong> {{ $post->created_at->format('d-m-Y') }} | {{ $created_days_ago }} giorn{{ $created_days_ago > 1 ? 'i' : 'o' }} fa</div>
-        @else
-            <div class="col">Creato oggi</div>
-        @endif
+       <div class="col">
+            @if ($created_days_ago > 0)
+                <div>Creato il:</strong> {{ $post->created_at->format('d-m-Y') }} | {{ $created_days_ago }} giorn{{ $created_days_ago > 1 ? 'i' : 'o' }} fa</div>
+            @else
+                <div>Creato oggi</div>
+            @endif
 
-        <div class="col"><strong>Aggiornato il:</strong> {{ $post->updated_at->format('d-m-Y') }}</div>
-        <div class="col"><strong>Slug</strong> {{ $post->slug }}</div>
+            <div><strong>Aggiornato il:</strong> {{ $post->updated_at->format('d-m-Y') }}</div>
+            <div><strong>Slug</strong> {{ $post->slug }}</div>
+            <div><strong>Categoria: </strong> {{ $post->category ? $post->category->name : 'nessuna' }}</div>
+       </div>
     </div>
 
     <div>
