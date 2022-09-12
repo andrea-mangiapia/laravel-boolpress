@@ -1908,33 +1908,38 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var yargs_build_lib_process_argv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! yargs/build/lib/process-argv */ "./node_modules/yargs/build/lib/process-argv.js");
-/* harmony import */ var yargs_build_lib_process_argv__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(yargs_build_lib_process_argv__WEBPACK_IMPORTED_MODULE_1__);
-
-
+// import axios from 'axios';
+// import { getProcessArgvWithoutBin } from 'yargs/build/lib/process-argv';
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Posts',
   data: function data() {
     return {
-      posts: []
+      pageTitle: 'Tutti i post',
+      posts: [],
+      currentPaginationPage: 1,
+      lastPaginationPage: null
     };
   },
   methods: {
     truncateText: function truncateText(text) {
       if (text.length > 75) {
-        return text.slice(0, 70) + '...';
+        return text.slice(0, 75) + '...';
       }
 
       return text;
     },
-    getPosts: function getPosts() {
+    getPosts: function getPosts(pageNumber) {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/posts').then(function (response) {
+      axios.get('/api/posts', {
+        params: {
+          page: pageNumber
+        }
+      }).then(function (response) {
         // console.log(response.data.results);
-        _this.posts = response.data.results;
+        _this.posts = response.data.results.data;
+        _this.currentPaginationPage = response.data.results.current_page;
+        _this.lastPaginationPage = response.data.results.last_page;
       });
     }
   },
@@ -2000,7 +2005,41 @@ var render = function render() {
     }, [_vm._v(_vm._s(post.title))]), _vm._v(" "), _c("p", {
       staticClass: "card-text"
     }, [_vm._v(_vm._s(_vm.truncateText(post.content)))])])])]);
-  }), 0)])]);
+  }), 0), _vm._v(" "), _c("nav", {
+    staticClass: "mt-3"
+  }, [_c("ul", {
+    staticClass: "pagination"
+  }, [_c("li", {
+    staticClass: "page-item",
+    "class": {
+      disable: _vm.currentPaginationPage === 1
+    }
+  }, [_c("a", {
+    staticClass: "page-link",
+    attrs: {
+      href: "#"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.getPosts(_vm.currentPaginationPage - 1);
+      }
+    }
+  }, [_vm._v("Previous")])]), _vm._v(" "), _c("li", {
+    staticClass: "page-item",
+    "class": {
+      disable: _vm.currentPaginationPage === _vm.lastPaginationPage
+    }
+  }, [_c("a", {
+    staticClass: "page-link",
+    attrs: {
+      href: "#"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.getPosts(_vm.currentPaginationPage + 1);
+      }
+    }
+  }, [_vm._v("Next")])])])])])]);
 };
 
 var staticRenderFns = [function () {
@@ -49593,50 +49632,6 @@ module.exports = function(module) {
 	return module;
 };
 
-
-/***/ }),
-
-/***/ "./node_modules/yargs/build/lib/process-argv.js":
-/*!******************************************************!*\
-  !*** ./node_modules/yargs/build/lib/process-argv.js ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProcessArgvBin = exports.getProcessArgvWithoutBin = void 0;
-function getProcessArgvBinIndex() {
-    // The binary name is the first command line argument for:
-    // - bundled Electron apps: bin argv1 argv2 ... argvn
-    if (isBundledElectronApp())
-        return 0;
-    // or the second one (default) for:
-    // - standard node apps: node bin.js argv1 argv2 ... argvn
-    // - unbundled Electron apps: electron bin.js argv1 arg2 ... argvn
-    return 1;
-}
-function isBundledElectronApp() {
-    // process.defaultApp is either set by electron in an electron unbundled app, or undefined
-    // see https://github.com/electron/electron/blob/master/docs/api/process.md#processdefaultapp-readonly
-    return isElectronApp() && !process.defaultApp;
-}
-function isElectronApp() {
-    // process.versions.electron is either set by electron, or undefined
-    // see https://github.com/electron/electron/blob/master/docs/api/process.md#processversionselectron-readonly
-    return !!process.versions.electron;
-}
-function getProcessArgvWithoutBin() {
-    return process.argv.slice(getProcessArgvBinIndex() + 1);
-}
-exports.getProcessArgvWithoutBin = getProcessArgvWithoutBin;
-function getProcessArgvBin() {
-    return process.argv[getProcessArgvBinIndex()];
-}
-exports.getProcessArgvBin = getProcessArgvBin;
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 

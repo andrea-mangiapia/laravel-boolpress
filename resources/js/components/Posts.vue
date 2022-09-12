@@ -19,38 +19,59 @@
                                 <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                             </div>
                         </div>
-
                     </div>
-
                 </div>
+
+                <nav class="mt-3">
+                    <ul class="pagination">
+                        <li class="page-item" :class="{'disable' : currentPaginationPage === 1}">
+                            <a class="page-link" @click="getPosts(currentPaginationPage - 1)" href="#">Previous</a>
+                        </li>
+                        <!-- <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li> -->
+                        <li class="page-item" :class="{'disable' : currentPaginationPage === lastPaginationPage}">
+                            <a class="page-link" @click="getPosts(currentPaginationPage + 1)" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </section>
 </template>
 
 <script>
-import Axios from 'axios';
-import { getProcessArgvWithoutBin } from 'yargs/build/lib/process-argv';
+// import axios from 'axios';
+// import { getProcessArgvWithoutBin } from 'yargs/build/lib/process-argv';
 
 export default {
     name: 'Posts',
     data() {
         return {
-            posts: []
+            pageTitle: 'Tutti i post',
+            posts: [],
+            currentPaginationPage: 1,
+            lastPaginationPage: null
         };
     },
     methods: {
         truncateText(text) {
             if(text.length > 75) {
-                return text.slice(0, 70) + '...';
+                return text.slice(0, 75) + '...';
             }
 
             return text;
         },
-        getPosts() {
-            Axios.get('/api/posts')
+        getPosts(pageNumber) {
+            axios.get('/api/posts', {
+                params: {
+                    page: pageNumber
+                }
+            })
             .then((response) => {
                 // console.log(response.data.results);
-                this.posts = response.data.results;
+                this.posts = response.data.results.data;
+                this.currentPaginationPage = response.data.results.current_page;
+                this.lastPaginationPage = response.data.results.last_page;
             });
         }
     },
