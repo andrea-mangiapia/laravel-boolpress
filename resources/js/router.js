@@ -6,6 +6,8 @@ Vue.use(VueRouter);
 import HomePage from './pages/HomePage.vue';
 import AboutPage from './pages/AboutPage.vue';
 import BlogPage from './pages/BlogPage.vue';
+import NotFound from './pages/NotFound.vue';
+
 
 // Regole per il routing
 const router = new VueRouter({
@@ -27,6 +29,12 @@ const router = new VueRouter({
             path: '/blog',
             name: 'blog',
             component: BlogPage
+        },
+
+        {
+            path: '/*',
+            name: 'not-found',
+            component: NotFound
         },
         
     ]

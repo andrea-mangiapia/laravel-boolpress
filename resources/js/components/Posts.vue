@@ -1,10 +1,6 @@
 <template>
         <section>
             <div class="container">
-                <div>
-                    <a href="/admin">Admin privata</a>
-                </div>
-
 
                 <h2>{{ title }}</h2>
 
