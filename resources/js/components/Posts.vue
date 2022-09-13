@@ -6,7 +6,7 @@
                 </div>
 
 
-                <h1>Tutti i post</h1>
+                <h2>{{ title }}</h2>
 
                 <div class="row row-cols-3">
                     <!-- single col -->
@@ -52,7 +52,7 @@ export default {
     name: 'Posts',
     data() {
         return {
-            pageTitle: 'Tutti i post',
+            title: 'Tutti i post',
             posts: [],
             currentPaginationPage: 1,
             lastPaginationPage: null
