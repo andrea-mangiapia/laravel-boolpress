@@ -14,6 +14,7 @@
 
             <p>{{post.content}}</p>
         </div>
+        <div v-else>Loading..</div>
         
         <!-- {{$route.params.slug}} -->
 
@@ -34,7 +35,14 @@
         mounted() {
             axios.get('/api/posts/' + this.$route.params.slug)
             .then((response) => {
-                this.post = response.data.results;
+                // Se abbiamo trovato un post ok popoliamo thi.post e lo stampiamo
+                if(response.data.success) {
+                    this.post = response.data.results;
+                }
+                else {
+                    // Altrimenti se il post non è stato trovato reindirizziamo l'utente a 404
+                    this.$router.push({name: 'not-found'});
+                }
             });
         }
     }

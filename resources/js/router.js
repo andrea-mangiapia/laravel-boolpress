@@ -6,8 +6,9 @@ Vue.use(VueRouter);
 import HomePage from './pages/HomePage.vue';
 import AboutPage from './pages/AboutPage.vue';
 import BlogPage from './pages/BlogPage.vue';
-import NotFound from './pages/NotFound.vue';
 import SinglePost from './pages/SinglePost.vue';
+import NotFound from './pages/NotFound.vue';
+
 
 
 
